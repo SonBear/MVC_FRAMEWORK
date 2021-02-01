@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	
+        <transaction name="changeLabel">
+		<controller nameFunction = "sayHello">com.mvc.framework.controller.Controller</controller>
+                <model nameFunction = "modifyMessage">com.mvc.framework.controller.Model</model>
+	</transaction>
+        
+          <transaction name="F">
+		<controller nameFunction = "sayHello">com.mvc.framework.controller.Controller</controller>
+                <model nameFunction = "modifyMessage">com.mvc.framework.controller.Model</model>
+	</transaction>
+
+	
+
+</config>
