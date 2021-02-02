@@ -15,40 +15,20 @@ public class Transaction {
 
     private String name;
     private String controller;
-    private String controller_func;
-    private String view;
-    private String view_func;
     private String model;
     private String model_func;
 
     public Transaction(String name, String controller, String view, String model) {
         this.name = name;
         this.controller = controller;
-        this.view = view;
         this.model = model;
     }
 
     public Transaction() {
     }
 
-    public String getController_func() {
-        return controller_func;
-    }
-
-    public String getView_func() {
-        return view_func;
-    }
-
     public String getModel_func() {
         return model_func;
-    }
-
-    public void setController_func(String controller_func) {
-        this.controller_func = controller_func;
-    }
-
-    public void setView_func(String view_func) {
-        this.view_func = view_func;
     }
 
     public void setModel_func(String model_func) {
@@ -63,10 +43,6 @@ public class Transaction {
         return controller;
     }
 
-    public String getView() {
-        return view;
-    }
-
     public String getModel() {
         return model;
     }
@@ -79,17 +55,13 @@ public class Transaction {
         this.controller = controller;
     }
 
-    public void setView(String view) {
-        this.view = view;
-    }
-
     public void setModel(String model) {
         this.model = model;
     }
 
     @Override
     public String toString() {
-        return "Transaction{" + "name=" + name + ", controller=" + controller + ", controller_func=" + controller_func + ", view=" + view + ", view_func=" + view_func + ", model=" + model + ", model_func=" + model_func + '}';
+        return "Transaction{" + "name=" + name + ", controller=" + controller + ", model=" + model + ", model_func=" + model_func + '}';
     }
 
     @Override

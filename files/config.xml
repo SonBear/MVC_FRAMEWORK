@@ -10,6 +10,12 @@
 		<controller nameFunction = "sayHello">com.mvc.framework.controller.Controller</controller>
                 <model nameFunction = "modifyMessage">com.mvc.framework.controller.Model</model>
 	</transaction>
+        
+         <transaction name="Transaction1">
+		<controller>Controller</controller>
+                <model nameFunction = "methodModel">Model</model>
+	</transaction>
+
 
 	
 

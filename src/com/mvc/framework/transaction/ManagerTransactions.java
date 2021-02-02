@@ -5,10 +5,9 @@
  */
 package com.mvc.framework.transaction;
 
-import com.mvc.framework.logger.LogManager;
+import com.mvc.framework.logger.LogTransaction;
 import com.mvc.framework.logger.ManagerLog;
 import com.mvc.framework.reflection.ManagerReflection;
-import com.mvc.framework.reflection.ReflectionProcessor;
 import com.mvc.framework.xml.ManagerTransactionXML;
 import com.mvc.framework.xml.XMLManager;
 import java.util.List;
@@ -20,9 +19,9 @@ import javax.swing.JFrame;
  */
 public class ManagerTransactions implements TransactionExecutor {
 
-    private final ReflectionProcessor managerRe = new ManagerReflection();
+    private final ManagerReflection managerRe = new ManagerReflection();
     private final XMLManager<Transaction> managerXML = new ManagerTransactionXML("files/config.xml");
-    private final LogManager managerLog = new ManagerLog();
+    private final LogTransaction managerLog = new ManagerLog();
 
     @Override
     public void executeTransaction(String nameTransaction, JFrame frame, Object obj) throws Exception {
@@ -42,12 +41,12 @@ public class ManagerTransactions implements TransactionExecutor {
         }
 
         //model process Object
-        Object objectRes = managerRe.runMethodModel(transaction.getModel(), transaction.getModel_func(), obj);
+        Object controller = managerRe.getInstanceClass(transaction.getController());
         //Controller response of that object processed and define behaviour in ur view
-        managerRe.runMethodController(transaction.getController(), transaction.getController_func(), frame, objectRes);
+        managerRe.runMethodModel(transaction.getModel(), transaction.getModel_func(), frame, controller, obj);
         //the view execute some operation about the object processed
 
-        managerLog.writeLogFile(transactions, transaction);
+        managerLog.writeLogTransaction(transactions, transaction);
         //Cla
     }
 }

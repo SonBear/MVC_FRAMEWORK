@@ -5,15 +5,19 @@
         <group>
             <file>file:/C:/Users/emman/Documents/Quinto%20Semestre/Arquitectura%20de%20software/Programas/MVC_FRAMEWORK/src/com/mvc/framework/xml/NoFileConfigException.java</file>
             <file>file:/C:/Users/emman/Documents/Quinto%20Semestre/Arquitectura%20de%20software/Programas/MVC_FRAMEWORK/src/com/mvc/framework/xml/BadConfigException.java</file>
-            <file>file:/C:/Users/emman/Documents/Quinto%20Semestre/Arquitectura%20de%20software/Programas/MVC_FRAMEWORK/src/com/mvc/framework/controller/Controller.java</file>
-            <file>file:/C:/Users/emman/Documents/Quinto%20Semestre/Arquitectura%20de%20software/Programas/MVC_FRAMEWORK/src/com/mvc/framework/view/View.java</file>
             <file>file:/C:/Users/emman/Documents/Quinto%20Semestre/Arquitectura%20de%20software/Programas/MVC_FRAMEWORK/src/com/mvc/framework/transaction/ManagerTransactions.java</file>
             <file>file:/C:/Users/emman/Documents/Quinto%20Semestre/Arquitectura%20de%20software/Programas/MVC_FRAMEWORK/src/com/mvc/framework/reflection/ManagerReflection.java</file>
+            <file>file:/C:/Users/emman/Documents/Quinto%20Semestre/Arquitectura%20de%20software/Programas/MVC_FRAMEWORK/src/Model.java</file>
+            <file>file:/C:/Users/emman/Documents/Quinto%20Semestre/Arquitectura%20de%20software/Programas/MVC_FRAMEWORK/src/com/mvc/framework/logger/LogManager.java</file>
+            <file>file:/C:/Users/emman/Documents/Quinto%20Semestre/Arquitectura%20de%20software/Programas/MVC_FRAMEWORK/src/com/mvc/framework/logger/BadConfigLogException.java</file>
+            <file>file:/C:/Users/emman/Documents/Quinto%20Semestre/Arquitectura%20de%20software/Programas/MVC_FRAMEWORK/src/com/mvc/framework/xml/XMLManager.java</file>
+            <file>file:/C:/Users/emman/Documents/Quinto%20Semestre/Arquitectura%20de%20software/Programas/MVC_FRAMEWORK/src/Controller.java</file>
+            <file>file:/C:/Users/emman/Documents/Quinto%20Semestre/Arquitectura%20de%20software/Programas/MVC_FRAMEWORK/src/View.java</file>
             <file>file:/C:/Users/emman/Documents/Quinto%20Semestre/Arquitectura%20de%20software/Programas/MVC_FRAMEWORK/src/com/mvc/framework/transaction/NoTransactionException.java</file>
             <file>file:/C:/Users/emman/Documents/Quinto%20Semestre/Arquitectura%20de%20software/Programas/MVC_FRAMEWORK/src/com/mvc/framework/reflection/ReflectionProcessor.java</file>
-            <file>file:/C:/Users/emman/Documents/Quinto%20Semestre/Arquitectura%20de%20software/Programas/MVC_FRAMEWORK/src/com/mvc/framework/model/Model.java</file>
+            <file>file:/C:/Users/emman/Documents/Quinto%20Semestre/Arquitectura%20de%20software/Programas/MVC_FRAMEWORK/src/com/mvc/framework/logger/ManagerLog.java</file>
             <file>file:/C:/Users/emman/Documents/Quinto%20Semestre/Arquitectura%20de%20software/Programas/MVC_FRAMEWORK/src/com/mvc/framework/xml/ManagerTransactionXML.java</file>
-            <file>file:/C:/Users/emman/Documents/Quinto%20Semestre/Arquitectura%20de%20software/Programas/MVC_FRAMEWORK/src/com/mvc/framework/xml/XMLManager.java</file>
+            <file>file:/C:/Users/emman/Documents/Quinto%20Semestre/Arquitectura%20de%20software/Programas/MVC_FRAMEWORK/src/com/mvc/framework/logger/ManagerFiles.java</file>
             <file>file:/C:/Users/emman/Documents/Quinto%20Semestre/Arquitectura%20de%20software/Programas/MVC_FRAMEWORK/src/com/mvc/framework/transaction/TransactionExecutor.java</file>
         </group>
     </open-files>

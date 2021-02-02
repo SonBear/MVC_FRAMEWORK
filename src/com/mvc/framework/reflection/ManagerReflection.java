@@ -14,57 +14,30 @@ import java.util.HashMap;
  *
  * @author emman
  */
-public class ManagerReflection implements ReflectionProcessor {
+public class ManagerReflection implements ReflectionProcessorTransaction {
 
     private HashMap<String, Object> instances = new HashMap<>();
 
     @Override
-    public void runMethodController(String nameClass, String nameMethod, Object view, Object modelObj) throws ClassNotFoundException, NoSuchMethodException {
+    public void runMethodModel(String modelNameClass, String nameMethodModel, Object view, Object controller, Object arg)
+            throws NoSuchMethodException, ClassNotFoundException {
         try {
-            Object instance = getInstanceClass(nameClass);
-            Class c = Class.forName(nameClass);
+            Class c = Class.forName(modelNameClass);
+            Object instance = getInstanceClass(modelNameClass);
 
             if (view == null) {
-                Method method = c.getMethod(nameMethod, modelObj.getClass());
-                method.invoke(instance, modelObj);
+                Method method = c.getMethod(nameMethodModel, controller.getClass(), arg.getClass());
+                method.invoke(instance, controller.getClass(), arg.getClass());
 
-            } else if (modelObj == null) {
-
-                Method method = c.getMethod(nameMethod, view.getClass());
-                method.invoke(instance, view);
-
+            } else if (controller == null) {
+                Method method = c.getMethod(nameMethodModel, view.getClass(), arg.getClass());
+                method.invoke(instance, view.getClass(), arg.getClass());
+            } else if (arg == null) {
+                Method method = c.getMethod(nameMethodModel, view.getClass(), controller.getClass());
+                method.invoke(instance, view.getClass(), controller.getClass());
             } else {
-                Method method = c.getMethod(nameMethod, view.getClass(), modelObj.getClass());
-                method.invoke(instance, view, modelObj);
-            }
-
-        } catch (NoSuchMethodException ex) {
-            throw new NoSuchMethodException("Error metodo no existe en el controlador");
-        } catch (SecurityException ex) {
-            throw new NoSuchMethodException("Error metodo inaccesible");
-        } catch (IllegalAccessException ex) {
-            throw new NoSuchMethodException("Error metodo inaccesible");
-        } catch (IllegalArgumentException ex) {
-            throw new NoSuchMethodException("Error metodo inaccesible");
-        } catch (InvocationTargetException ex) {
-            throw new NoSuchMethodException("Error metodo inaccesible");
-        }
-    }
-
-    @Override
-    public Object runMethodModel(String nameClass, String nameMethod, Object modelObj) throws ClassNotFoundException, NoSuchMethodException {
-        Object objRes = null;
-        try {
-            Class c = Class.forName(nameClass);
-            Object instance = getInstanceClass(nameClass);
-
-            if (modelObj == null) {
-                Method method = c.getMethod(nameMethod);
-                objRes = method.invoke(instance);
-
-            } else {
-                Method method = c.getMethod(nameMethod, modelObj.getClass());
-                objRes = method.invoke(instance, modelObj);
+                Method method = c.getMethod(nameMethodModel, view.getClass(), controller.getClass(), arg.getClass());
+                method.invoke(instance, view, controller, arg);
             }
 
         } catch (NoSuchMethodException ex) {
@@ -74,14 +47,14 @@ public class ManagerReflection implements ReflectionProcessor {
         } catch (IllegalAccessException ex) {
             throw new NoSuchMethodException("Error metodo inaccesible");
         } catch (IllegalArgumentException ex) {
-            throw new NoSuchMethodException("Error metodo inaccesible");
+            throw new NoSuchMethodException("Error argumentos del metodo no validos");
         } catch (InvocationTargetException ex) {
-            throw new NoSuchMethodException("Error metodo inaccesible");
+            throw new NoSuchMethodException("Error en el codigo dentro del metodo");
         }
-        return objRes;
     }
 
-    private Object getInstanceClass(String nameClass) throws ClassNotFoundException {
+    @Override
+    public Object getInstanceClass(String nameClass) throws ClassNotFoundException {
 
         if (instances.containsKey(nameClass)) {
             return instances.get(nameClass);
@@ -106,11 +79,11 @@ public class ManagerReflection implements ReflectionProcessor {
             } catch (InstantiationException ex) {
                 throw new ClassNotFoundException("Error al inicializar clase");
             } catch (IllegalAccessException ex) {
-                throw new ClassNotFoundException("Error al inicializar clase");
+                throw new ClassNotFoundException("Error al inicializar no es accesible el constructor clase");
             } catch (IllegalArgumentException ex) {
-                throw new ClassNotFoundException("Error al inicializar clase");
+                throw new ClassNotFoundException("Error al inicializar argumentos no validos para el contructor clase");
             } catch (InvocationTargetException ex) {
-                throw new ClassNotFoundException("Error al inicializar clase");
+                throw new ClassNotFoundException("Error en el codigo dentro del contructor de la clase");
             }
 
         }

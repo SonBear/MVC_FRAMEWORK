@@ -18,10 +18,12 @@ import java.util.Properties;
  *
  * @author emman
  */
-public class ManagerLog implements LogManager {
+public class ManagerLog implements LogTransaction {
 
     private String pathLogFile;
     private final String PATH_PROPS = "files/configLog.properties";
+    private final String PROPERTY_LOG_ON = "LogOn";
+    private final String PROPERTY_MAX_CAPACITY = "MaxCapacityFile";
 
     private Properties props;
     private final ManagerFiles managerFiles = new ManagerFiles();
@@ -33,10 +35,15 @@ public class ManagerLog implements LogManager {
     public ManagerLog() {
         pathLogFile = "files/log" + 0 + ".txt";
         file = new File(pathLogFile);
+        configLog();
     }
 
-    private void checkIsOnLog() {
-        String valueOn = props.getProperty("LogOn");
+    private void checkIsOnLog() throws BadConfigLogException {
+        String valueOn = props.getProperty(PROPERTY_LOG_ON);
+        if (valueOn == null) {
+            throw new BadConfigLogException("Error la propiedad LogOn no está definida en el archivo");
+        }
+
         valueOn = valueOn.trim();
         if (valueOn.equals("1")) {
             isOn = true;
@@ -45,44 +52,59 @@ public class ManagerLog implements LogManager {
         }
     }
 
-    private void checkFileSize() {
-        String size = props.getProperty("MaxCapacityFile");
-        if (size.contains("kb")) {
-            checkCurrentNumberFile(size);
-
+    private void checkFileSize() throws BadConfigLogException {
+        String size = props.getProperty(PROPERTY_MAX_CAPACITY);
+        if (size == null) {
+            throw new BadConfigLogException("Error la propiedad MaxCapacityFile no está definida en el archivo");
         }
-        if (size.contains("mb")) {
-            checkCurrentNumberFile(size);
+        try {
+            if (size.contains("kb")) {
+                size = size.substring(0, size.length() - 2);
 
-        }
-        if (size.contains("gb")) {
-            checkCurrentNumberFile(size);
+                double dSize = Double.parseDouble(size);
+                while (managerFiles.getFileSizeKiloBytes(file) > dSize) {
+                    changeCurrentNumberFile();
+                }
 
+            } else if (size.contains("mb")) {
+                size = size.substring(0, size.length() - 2);
+
+                double dSize = Double.parseDouble(size);
+                while (managerFiles.getFileSizeMegaBytes(file) > dSize) {
+                    changeCurrentNumberFile();
+                }
+
+            } else if (size.contains("gb")) {
+                size = size.substring(0, size.length() - 2);
+
+                double dSize = Double.parseDouble(size);
+                while (managerFiles.getFileSizeGigaBytes(file) > dSize) {
+                    changeCurrentNumberFile();
+                }
+
+            } else {
+                throw new BadConfigLogException("Error escriba el tipo de tamaño correcto kb-mg-gb");
+            }
+        } catch (NumberFormatException ex) {
+            throw new BadConfigLogException("Error formato incorrecto del tamaño de archivo maximo");
         }
+
     }
 
-    private void checkCurrentNumberFile(String size) {
-        size = size.replaceAll("[a-zA-Z]", "");
-        double dSize = Double.parseDouble(size);
-        while (managerFiles.getFileSizeGigaBytes(file) > dSize) {
-            currentNumberFile++;
-            pathLogFile = "files/log" + currentNumberFile + ".txt";
-            file = new File(pathLogFile);
-        }
+    private void changeCurrentNumberFile() {
+
+        currentNumberFile++;
+        pathLogFile = "files/log" + currentNumberFile + ".txt";
+        file = new File(pathLogFile);
+
     }
 
     private String readLogFile() {
-        props = configLog();
-        checkFileSize();
         return managerFiles.readFile(pathLogFile);
     }
 
     @Override
-    public void writeLogFile(List<Transaction> transactions, Transaction transaction) throws BadConfigLogException {
-        props = configLog();
-        if (!(props.contains("LogOn") && props.contains("MaxCapacityFile"))) {
-            throw new BadConfigLogException("Error en el archivo de configuracion");
-        }
+    public void writeLogTransaction(List<Transaction> transactions, Transaction transaction) throws BadConfigLogException {
         checkFileSize();
         checkIsOnLog();
         if (isOn) {
@@ -106,17 +128,18 @@ public class ManagerLog implements LogManager {
 
     }
 
-    private Properties configLog() {
-        Properties prop = new Properties();
+    private void configLog() {
+        if (props == null) {
+            props = new Properties();
 
-        try (InputStream input = new FileInputStream(PATH_PROPS)) {
+            try (InputStream input = new FileInputStream(PATH_PROPS)) {
 
-            // load a properties file
-            prop.load(input);
+                // load a properties file
+                props.load(input);
 
-        } catch (IOException ex) {
-            ex.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
-        return prop;
     }
 }

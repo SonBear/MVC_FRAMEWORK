@@ -30,9 +30,6 @@ public class ManagerTransactionXML implements XMLManager<Transaction> {
     static final String NAME = "name";
     static final String TRANSACTION = "transaction";
     static final String CONTROLLER = "controller";
-    static final String CONTROLLER_NAME_FUNC = "nameFunction";
-    static final String VIEW = "view";
-    static final String VIEW_NAME_FUNC = "nameFunction";
     static final String MODEL = "model";
     static final String MODEL_NAME_FUNC = "nameFunction";
 
@@ -75,27 +72,11 @@ public class ManagerTransactionXML implements XMLManager<Transaction> {
                             break;
                         case CONTROLLER:
 
-                            while (attributes.hasNext()) {
-                                Attribute attribute = attributes.next();
-                                if (attribute.getName().toString().equals(CONTROLLER_NAME_FUNC)) {
-                                    transaction.setController_func(attribute.getValue());
-                                }
-                            }
                             event = eventReader.nextEvent();
                             transaction.setController(event.asCharacters().getData());
 
                             break;
-                        case VIEW:
 
-                            while (attributes.hasNext()) {
-                                Attribute attribute = attributes.next();
-                                if (attribute.getName().toString().equals(VIEW_NAME_FUNC)) {
-                                    transaction.setView_func(attribute.getValue());
-                                }
-                            }
-                            event = eventReader.nextEvent();
-                            transaction.setView(event.asCharacters().getData());
-                            break;
                         case MODEL:
 
                             while (attributes.hasNext()) {
@@ -117,6 +98,7 @@ public class ManagerTransactionXML implements XMLManager<Transaction> {
                         if (!isCorrectTransaction(transaction)) {
                             throw new BadConfigException("Archivo de configuracion mal definido");
                         }
+
                         items.add(transaction);
                     }
                 }
@@ -132,11 +114,8 @@ public class ManagerTransactionXML implements XMLManager<Transaction> {
     }
 
     private Boolean isCorrectTransaction(Transaction transaction) {
-        if (transaction.getController() == null || transaction.getController_func() == null || transaction.getModel() == null
-                || transaction.getModel_func() == null) {
-            return false;
-        }
-        return true;
+        return transaction.getName() != null && transaction.getController() != null && transaction.getModel() != null
+                && transaction.getModel_func() != null;
     }
 
 }
