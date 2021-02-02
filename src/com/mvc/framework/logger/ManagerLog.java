@@ -20,7 +20,7 @@ import java.util.Properties;
  */
 public class ManagerLog implements LogManager {
 
-    private String PATH_LOG = "files/log" + 0 + ".txt";
+    private String pathLogFile;
     private final String PATH_PROPS = "files/configLog.properties";
 
     private Properties props;
@@ -31,16 +31,11 @@ public class ManagerLog implements LogManager {
     private File file;
 
     public ManagerLog() {
-        PATH_LOG = "files/log" + 0 + ".txt";
-        file = new File(PATH_LOG);
-        props = configLog();
-        checkIsOnLog();
-        checkFileSize();
-
+        pathLogFile = "files/log" + 0 + ".txt";
+        file = new File(pathLogFile);
     }
 
     private void checkIsOnLog() {
-        props = configLog();
         String valueOn = props.getProperty("LogOn");
         valueOn = valueOn.trim();
         if (valueOn.equals("1")) {
@@ -51,51 +46,43 @@ public class ManagerLog implements LogManager {
     }
 
     private void checkFileSize() {
-        props = configLog();
         String size = props.getProperty("MaxCapacityFile");
         if (size.contains("kb")) {
-
-            size = size.replaceAll("[a-zA-Z]", "");
-            double dSize = Double.parseDouble(size);
-
-            while (managerFiles.getFileSizeKiloBytes(file) >= dSize) {
-                currentNumberFile++;
-                PATH_LOG = "files/log" + currentNumberFile + ".txt";
-                file = new File(PATH_LOG);
-            }
+            checkCurrentNumberFile(size);
 
         }
         if (size.contains("mb")) {
-            size = size.replaceAll("[a-zA-Z]", "");
-            double dSize = Double.parseDouble(size);
-            while (managerFiles.getFileSizeMegaBytes(file) > dSize) {
-                currentNumberFile++;
-                PATH_LOG = "files/log" + currentNumberFile + ".txt";
-                file = new File(PATH_LOG);
-            }
+            checkCurrentNumberFile(size);
 
         }
         if (size.contains("gb")) {
-            size = size.replaceAll("[a-zA-Z]", "");
-            double dSize = Double.parseDouble(size);
-            while (managerFiles.getFileSizeGigaBytes(file) > dSize) {
-                currentNumberFile++;
-                PATH_LOG = "files/log" + currentNumberFile + ".txt";
-                file = new File(PATH_LOG);
-            }
+            checkCurrentNumberFile(size);
 
+        }
+    }
+
+    private void checkCurrentNumberFile(String size) {
+        size = size.replaceAll("[a-zA-Z]", "");
+        double dSize = Double.parseDouble(size);
+        while (managerFiles.getFileSizeGigaBytes(file) > dSize) {
+            currentNumberFile++;
+            pathLogFile = "files/log" + currentNumberFile + ".txt";
+            file = new File(pathLogFile);
         }
     }
 
     private String readLogFile() {
         props = configLog();
         checkFileSize();
-        return managerFiles.readFile(PATH_LOG);
+        return managerFiles.readFile(pathLogFile);
     }
 
     @Override
-    public void writeLogFile(List<Transaction> transactions, Transaction transaction) {
+    public void writeLogFile(List<Transaction> transactions, Transaction transaction) throws BadConfigLogException {
         props = configLog();
+        if (!(props.contains("LogOn") && props.contains("MaxCapacityFile"))) {
+            throw new BadConfigLogException("Error en el archivo de configuracion");
+        }
         checkFileSize();
         checkIsOnLog();
         if (isOn) {
@@ -114,7 +101,7 @@ public class ManagerLog implements LogManager {
                 }
             }
 
-            managerFiles.writeFile(PATH_LOG, con);
+            managerFiles.writeFile(pathLogFile, con);
         }
 
     }

@@ -14,6 +14,6 @@ import java.util.List;
  */
 public interface LogManager {
 
-    public void writeLogFile(List<Transaction> transactions, Transaction transaction);
+    public void writeLogFile(List<Transaction> transactions, Transaction transaction) throws BadConfigLogException;
 
 }

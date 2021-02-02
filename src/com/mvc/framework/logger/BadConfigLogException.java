@@ -3,12 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mvc.framework.model;
+package com.mvc.framework.logger;
 
 /**
  *
  * @author emman
  */
-public class Model {
+public class BadConfigLogException extends Exception {
+
+    public BadConfigLogException(String message) {
+        super(message);
+    }
 
 }
