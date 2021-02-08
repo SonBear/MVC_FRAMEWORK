@@ -17,30 +17,26 @@ import java.util.Scanner;
  */
 public class ManagerFiles {
 
-    public String readFile(String path) {
+    public String readFile(String path) throws FileNotFoundException {
         String res = "";
-        try {
 
-            Scanner fileReader = new Scanner(new File(path));
+        Scanner fileReader = new Scanner(new File(path));
 
-            while (fileReader.hasNext()) {
+        while (fileReader.hasNext()) {
 
-                res += fileReader.nextLine() + "\n";
+            res += fileReader.nextLine() + "\n";
 
-            }
-            fileReader.close();
-        } catch (FileNotFoundException ex) {
         }
+        fileReader.close();
+
         return res;
     }
 
-    public void writeFile(String path, String content) {
-        try (FileWriter fileWriter = new FileWriter(path)) {
-            fileWriter.write(content);
-            fileWriter.close();
-        } catch (IOException e) {
+    public void writeFile(String path, String content) throws IOException {
+        FileWriter fileWriter = new FileWriter(path);
+        fileWriter.write(content);
+        fileWriter.close();
 
-        }
     }
 
     public double getFileSizeGigaBytes(File file) {

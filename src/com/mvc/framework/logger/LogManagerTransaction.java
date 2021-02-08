@@ -9,6 +9,7 @@ import com.mvc.framework.logger.constants.SizeFiles;
 import com.mvc.framework.transaction.Transaction;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
@@ -107,31 +108,39 @@ public class LogManagerTransaction implements LogTransaction {
 
     }
 
-    private String readLogFile() {
-        return managerFiles.readFile(pathLogFile);
+    private String readLogFile() throws NoFilePropsException {
+        try {
+            return managerFiles.readFile(pathLogFile);
+        } catch (FileNotFoundException ex) {
+            throw new NoFilePropsException(MessagesError.MSG_ERROR_NO_FILE_PROPERTIES.toString());
+        }
     }
 
     @Override
-    public void writeLogTransaction(List<Transaction> transactions, Transaction transaction) throws BadConfigLogException {
+    public void writeLogTransaction(List<Transaction> transactions, Transaction transaction) throws BadConfigLogException, NoFilePropsException {
         checkFileSize();
         if (isLogOn()) {
-            String content = readLogFile();
-            if (!content.equals("")) {
-                content += "\n\n";
-            }
-            content += (LogText.MSG_DATE_EXECUTE + new Date().toString() + "\n");
-            content += (LogText.MSG_TRANSACTION_LIST);
-
-            for (int i = 0; i < transactions.size(); i++) {
-                if (transactions.get(i).equals(transaction)) {
-                    content += (i + 1) + LogText.POINT_LIST.toString()
-                            + transactions.get(i).getName() + LogText.POINTER_TRANSACTION_EXECUTE + "\n";
-                } else {
-                    content += (i + 1) + LogText.POINT_LIST.toString() + transactions.get(i).getName() + "\n";
+            try {
+                String content = readLogFile();
+                if (!content.equals("")) {
+                    content += "\n\n";
                 }
-            }
+                content += (LogText.MSG_DATE_EXECUTE + new Date().toString() + "\n");
+                content += (LogText.MSG_TRANSACTION_LIST);
 
-            managerFiles.writeFile(pathLogFile, content);
+                for (int i = 0; i < transactions.size(); i++) {
+                    if (transactions.get(i).equals(transaction)) {
+                        content += (i + 1) + LogText.POINT_LIST.toString()
+                                + transactions.get(i).getName() + LogText.POINTER_TRANSACTION_EXECUTE + "\n";
+                    } else {
+                        content += (i + 1) + LogText.POINT_LIST.toString() + transactions.get(i).getName() + "\n";
+                    }
+                }
+
+                managerFiles.writeFile(pathLogFile, content);
+            } catch (IOException ex) {
+                throw new NoFilePropsException(MessagesError.MSG_ERROR_NO_FILE_PROPERTIES.toString());
+            }
 
         }
 

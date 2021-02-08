@@ -6,6 +6,7 @@
 package com.mvc.framework.logger;
 
 import com.mvc.framework.logger.exceptions.BadConfigLogException;
+import com.mvc.framework.logger.exceptions.NoFilePropsException;
 import com.mvc.framework.transaction.Transaction;
 import java.util.List;
 
@@ -15,6 +16,6 @@ import java.util.List;
  */
 public interface LogTransaction {
 
-    public void writeLogTransaction(List<Transaction> transactions, Transaction transaction) throws BadConfigLogException;
+    public void writeLogTransaction(List<Transaction> transactions, Transaction transaction) throws BadConfigLogException, NoFilePropsException;
 
 }
