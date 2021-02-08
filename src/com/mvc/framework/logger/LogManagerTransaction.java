@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mvc.framework.logger;
 
 import com.mvc.framework.transaction.Transaction;
@@ -18,47 +13,54 @@ import java.util.Properties;
  *
  * @author emman
  */
-public class ManagerLog implements LogTransaction {
+public class LogManagerTransaction implements LogTransaction {
 
+    //Path files
     private String pathLogFile;
-    private final String PATH_PROPS = "files/configLog.properties";
+
+    //Properties names
     private final String PROPERTY_LOG_ON = "LogOn";
     private final String PROPERTY_MAX_CAPACITY = "MaxCapacityFile";
 
-    private Properties props;
-    private final ManagerFiles managerFiles = new ManagerFiles();
+    //properties values
+    private final String VALUE_IS_LOG_ON = "1";
 
+    //Util objects
+    private Properties props;
+    private final ManagerFiles managerFiles;
+
+    //status objects
     private int currentNumberFile;
-    private boolean isOn;
     private File file;
 
-    public ManagerLog() {
-        pathLogFile = "files/log" + 0 + ".txt";
+    //Messages log
+    public LogManagerTransaction() {
+        pathLogFile = PathsLog.RELATIVE_PATH_LOG_FILE.toString()
+                + currentNumberFile + PathsLog.TYPE_LOG_FILE.toString();
         file = new File(pathLogFile);
+        managerFiles = new ManagerFiles();
         configLog();
     }
 
-    private void checkIsOnLog() throws BadConfigLogException {
+    private boolean isLogOn() throws BadConfigLogException {
         String valueOn = props.getProperty(PROPERTY_LOG_ON);
+
         if (valueOn == null) {
-            throw new BadConfigLogException("Error la propiedad LogOn no está definida en el archivo");
+            throw new BadConfigLogException(MessagesError.MSG_ERROR_BAD_CONFIG_LOG_ON.toString());
         }
 
         valueOn = valueOn.trim();
-        if (valueOn.equals("1")) {
-            isOn = true;
-        } else {
-            isOn = false;
-        }
+
+        return valueOn.equals(VALUE_IS_LOG_ON);
     }
 
     private void checkFileSize() throws BadConfigLogException {
         String size = props.getProperty(PROPERTY_MAX_CAPACITY);
         if (size == null) {
-            throw new BadConfigLogException("Error la propiedad MaxCapacityFile no está definida en el archivo");
+            throw new BadConfigLogException(MessagesError.MSG_ERROR_BAD_CONFIG_MAX_CAP.toString());
         }
         try {
-            if (size.contains("kb")) {
+            if (size.contains(SizeFiles.SIZE_KB.toString())) {
                 size = size.substring(0, size.length() - 2);
 
                 double dSize = Double.parseDouble(size);
@@ -66,7 +68,7 @@ public class ManagerLog implements LogTransaction {
                     changeCurrentNumberFile();
                 }
 
-            } else if (size.contains("mb")) {
+            } else if (size.contains(SizeFiles.SIZE_MG.toString())) {
                 size = size.substring(0, size.length() - 2);
 
                 double dSize = Double.parseDouble(size);
@@ -74,7 +76,7 @@ public class ManagerLog implements LogTransaction {
                     changeCurrentNumberFile();
                 }
 
-            } else if (size.contains("gb")) {
+            } else if (size.contains(SizeFiles.SIZE_GB.toString())) {
                 size = size.substring(0, size.length() - 2);
 
                 double dSize = Double.parseDouble(size);
@@ -83,10 +85,10 @@ public class ManagerLog implements LogTransaction {
                 }
 
             } else {
-                throw new BadConfigLogException("Error escriba el tipo de tamaño correcto kb-mg-gb");
+                throw new BadConfigLogException(MessagesError.MSG_ERROR_BAD_TYPE_SIZE_FILE.toString());
             }
         } catch (NumberFormatException ex) {
-            throw new BadConfigLogException("Error formato incorrecto del tamaño de archivo maximo");
+            throw new BadConfigLogException(MessagesError.MSG_ERROR_BAD_CONFIG_VALUE_MAX_CAP.toString());
         }
 
     }
@@ -94,7 +96,8 @@ public class ManagerLog implements LogTransaction {
     private void changeCurrentNumberFile() {
 
         currentNumberFile++;
-        pathLogFile = "files/log" + currentNumberFile + ".txt";
+        pathLogFile = PathsLog.RELATIVE_PATH_LOG_FILE.toString()
+                + currentNumberFile + PathsLog.TYPE_LOG_FILE.toString();
         file = new File(pathLogFile);
 
     }
@@ -106,24 +109,25 @@ public class ManagerLog implements LogTransaction {
     @Override
     public void writeLogTransaction(List<Transaction> transactions, Transaction transaction) throws BadConfigLogException {
         checkFileSize();
-        checkIsOnLog();
-        if (isOn) {
-            String con = readLogFile();
-            if (!con.equals("")) {
-                con += "\n\n";
+        if (isLogOn()) {
+            String content = readLogFile();
+            if (!content.equals("")) {
+                content += "\n\n";
             }
-            con += ("Date Executed: " + new Date().toString() + "\n");
-            con += ("Transaction avaibles: \n");
+            content += (LogText.MSG_DATE_EXECUTE + new Date().toString() + "\n");
+            content += (LogText.MSG_TRANSACTION_LIST);
 
             for (int i = 0; i < transactions.size(); i++) {
                 if (transactions.get(i).equals(transaction)) {
-                    con += i + 1 + ".- " + transactions.get(i).getName() + "*" + "\n";
+                    content += (i + 1) + LogText.POINT_LIST.toString()
+                            + transactions.get(i).getName() + LogText.POINTER_TRANSACTION_EXECUTE + "\n";
                 } else {
-                    con += i + 1 + ".- " + transactions.get(i).getName() + "\n";
+                    content += (i + 1) + LogText.POINT_LIST.toString() + transactions.get(i).getName() + "\n";
                 }
             }
 
-            managerFiles.writeFile(pathLogFile, con);
+            managerFiles.writeFile(pathLogFile, content);
+
         }
 
     }
@@ -132,7 +136,7 @@ public class ManagerLog implements LogTransaction {
         if (props == null) {
             props = new Properties();
 
-            try (InputStream input = new FileInputStream(PATH_PROPS)) {
+            try (InputStream input = new FileInputStream(PathsLog.PATH_PROPS.toString())) {
 
                 // load a properties file
                 props.load(input);
