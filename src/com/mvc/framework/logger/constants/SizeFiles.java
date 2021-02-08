@@ -3,21 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mvc.framework.logger;
+package com.mvc.framework.logger.constants;
 
 /**
  *
  * @author emman
  */
-public enum PathsLog {
+public enum SizeFiles {
 
-    PATH_PROPS("files/configLog.properties"),
-    RELATIVE_PATH_LOG_FILE("files/log"),
-    TYPE_LOG_FILE(".txt");
+    SIZE_GB("gb"),
+    SIZE_KB("kb"),
+    SIZE_MG("mb");
 
     private final String value;
 
-    PathsLog(final String value) {
+    SizeFiles(final String value) {
         this.value = value;
     }
 
@@ -25,5 +25,4 @@ public enum PathsLog {
     public String toString() {
         return value;
     }
-
 }

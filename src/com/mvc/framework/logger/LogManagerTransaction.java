@@ -1,5 +1,11 @@
 package com.mvc.framework.logger;
 
+import com.mvc.framework.logger.exceptions.NoFilePropsException;
+import com.mvc.framework.logger.exceptions.BadConfigLogException;
+import com.mvc.framework.logger.constants.LogText;
+import com.mvc.framework.logger.constants.MessagesError;
+import com.mvc.framework.logger.constants.PathsLog;
+import com.mvc.framework.logger.constants.SizeFiles;
 import com.mvc.framework.transaction.Transaction;
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,13 +37,12 @@ public class LogManagerTransaction implements LogTransaction {
 
     //status objects
     private int currentNumberFile;
-    private File file;
+    private File currentFile;
 
-    //Messages log
-    public LogManagerTransaction() {
+    public LogManagerTransaction() throws NoFilePropsException {
         pathLogFile = PathsLog.RELATIVE_PATH_LOG_FILE.toString()
                 + currentNumberFile + PathsLog.TYPE_LOG_FILE.toString();
-        file = new File(pathLogFile);
+        currentFile = new File(pathLogFile);
         managerFiles = new ManagerFiles();
         configLog();
     }
@@ -64,7 +69,7 @@ public class LogManagerTransaction implements LogTransaction {
                 size = size.substring(0, size.length() - 2);
 
                 double dSize = Double.parseDouble(size);
-                while (managerFiles.getFileSizeKiloBytes(file) > dSize) {
+                while (managerFiles.getFileSizeKiloBytes(currentFile) > dSize) {
                     changeCurrentNumberFile();
                 }
 
@@ -72,7 +77,7 @@ public class LogManagerTransaction implements LogTransaction {
                 size = size.substring(0, size.length() - 2);
 
                 double dSize = Double.parseDouble(size);
-                while (managerFiles.getFileSizeMegaBytes(file) > dSize) {
+                while (managerFiles.getFileSizeMegaBytes(currentFile) > dSize) {
                     changeCurrentNumberFile();
                 }
 
@@ -80,7 +85,7 @@ public class LogManagerTransaction implements LogTransaction {
                 size = size.substring(0, size.length() - 2);
 
                 double dSize = Double.parseDouble(size);
-                while (managerFiles.getFileSizeGigaBytes(file) > dSize) {
+                while (managerFiles.getFileSizeGigaBytes(currentFile) > dSize) {
                     changeCurrentNumberFile();
                 }
 
@@ -98,7 +103,7 @@ public class LogManagerTransaction implements LogTransaction {
         currentNumberFile++;
         pathLogFile = PathsLog.RELATIVE_PATH_LOG_FILE.toString()
                 + currentNumberFile + PathsLog.TYPE_LOG_FILE.toString();
-        file = new File(pathLogFile);
+        currentFile = new File(pathLogFile);
 
     }
 
@@ -132,7 +137,7 @@ public class LogManagerTransaction implements LogTransaction {
 
     }
 
-    private void configLog() {
+    private void configLog() throws NoFilePropsException {
         if (props == null) {
             props = new Properties();
 
@@ -142,7 +147,7 @@ public class LogManagerTransaction implements LogTransaction {
                 props.load(input);
 
             } catch (IOException ex) {
-                ex.printStackTrace();
+                throw new NoFilePropsException(MessagesError.MSG_ERROR_NO_FILE_PROPERTIES.toString());
             }
         }
     }

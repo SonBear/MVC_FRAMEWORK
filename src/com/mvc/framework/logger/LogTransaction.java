@@ -5,6 +5,7 @@
  */
 package com.mvc.framework.logger;
 
+import com.mvc.framework.logger.exceptions.BadConfigLogException;
 import com.mvc.framework.transaction.Transaction;
 import java.util.List;
 
