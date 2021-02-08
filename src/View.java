@@ -21,6 +21,7 @@ public class View extends javax.swing.JFrame {
      */
     public View() {
         initComponents();
+        this.jButton1.addActionListener(new Controller());
     }
 
     /**
@@ -78,7 +79,7 @@ public class View extends javax.swing.JFrame {
             Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
-    
+
     public JButton getjButton1() {
         return jButton1;
     }

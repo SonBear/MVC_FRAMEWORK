@@ -31,3 +31,45 @@ Transaction avaibles:
 1.- changeLabel
 2.- F
 3.- Transaction1*
+
+
+Date Executed: Tue Feb 02 13:09:16 CST 2021
+Transaction avaibles: 
+1.- changeLabel
+2.- F
+3.- Transaction1*
+
+
+Date Executed: Tue Feb 02 13:09:18 CST 2021
+Transaction avaibles: 
+1.- changeLabel
+2.- F
+3.- Transaction1*
+
+
+Date Executed: Tue Feb 02 13:09:19 CST 2021
+Transaction avaibles: 
+1.- changeLabel
+2.- F
+3.- Transaction1*
+
+
+Date Executed: Tue Feb 02 13:09:20 CST 2021
+Transaction avaibles: 
+1.- changeLabel
+2.- F
+3.- Transaction1*
+
+
+Date Executed: Tue Feb 02 13:09:20 CST 2021
+Transaction avaibles: 
+1.- changeLabel
+2.- F
+3.- Transaction1*
+
+
+Date Executed: Tue Feb 02 13:09:21 CST 2021
+Transaction avaibles: 
+1.- changeLabel
+2.- F
+3.- Transaction1*

@@ -27,14 +27,11 @@ public class ManagerReflection implements ReflectionProcessorTransaction {
 
             if (view == null) {
                 Method method = c.getMethod(nameMethodModel, controller.getClass(), arg.getClass());
-                method.invoke(instance, controller.getClass(), arg.getClass());
+                method.invoke(instance, controller, arg);
 
-            } else if (controller == null) {
-                Method method = c.getMethod(nameMethodModel, view.getClass(), arg.getClass());
-                method.invoke(instance, view.getClass(), arg.getClass());
             } else if (arg == null) {
                 Method method = c.getMethod(nameMethodModel, view.getClass(), controller.getClass());
-                method.invoke(instance, view.getClass(), controller.getClass());
+                method.invoke(instance, view, controller);
             } else {
                 Method method = c.getMethod(nameMethodModel, view.getClass(), controller.getClass(), arg.getClass());
                 method.invoke(instance, view, controller, arg);
@@ -47,7 +44,7 @@ public class ManagerReflection implements ReflectionProcessorTransaction {
         } catch (IllegalAccessException ex) {
             throw new NoSuchMethodException("Error metodo inaccesible");
         } catch (IllegalArgumentException ex) {
-            throw new NoSuchMethodException("Error argumentos del metodo no validos");
+            throw new NoSuchMethodException("Error argumentos del metodo del modelo no validos");
         } catch (InvocationTargetException ex) {
             throw new NoSuchMethodException("Error en el codigo dentro del metodo");
         }
