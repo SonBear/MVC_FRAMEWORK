@@ -5,6 +5,8 @@
  */
 package com.mvc.framework.xml;
 
+import com.mvc.framework.xml.exceptions.NoFileConfigException;
+import com.mvc.framework.xml.exceptions.BadConfigException;
 import java.util.List;
 
 /**

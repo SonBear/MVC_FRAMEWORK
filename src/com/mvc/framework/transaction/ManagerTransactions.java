@@ -10,6 +10,7 @@ import com.mvc.framework.logger.LogTransaction;
 import com.mvc.framework.logger.exceptions.NoFilePropsException;
 import com.mvc.framework.reflection.ManagerReflection;
 import com.mvc.framework.reflection.ReflectionTransaction;
+import com.mvc.framework.transaction.exceptions.NoTransactionException;
 import com.mvc.framework.xml.ManagerTransactionXML;
 import com.mvc.framework.xml.XMLManager;
 import java.util.List;
@@ -21,11 +22,16 @@ import javax.swing.JFrame;
  */
 public class ManagerTransactions implements TransactionExecutor {
 
-    private final ReflectionTransaction managerRe = new ManagerReflection();
-    private final XMLManager<Transaction> managerXML = new ManagerTransactionXML("files/config.xml");
+    private final String PATH_CONFIG_FILE = "files/config.xml";
+    private final String ERROR_NO_TRANSACTION_EXIST = "La transaccion no está definida";
+
+    private final ReflectionTransaction managerRe;
+    private final XMLManager<Transaction> managerXML;
     private final LogTransaction managerLog;
 
     public ManagerTransactions() throws NoFilePropsException {
+        this.managerRe = new ManagerReflection();
+        this.managerXML = new ManagerTransactionXML(PATH_CONFIG_FILE);
         this.managerLog = new LogManagerTransaction();
     }
 
@@ -43,16 +49,14 @@ public class ManagerTransactions implements TransactionExecutor {
         }
 
         if (transaction == null) {
-            throw new NoTransactionException("La transaccion no está definida");
+            throw new NoTransactionException(ERROR_NO_TRANSACTION_EXIST);
         }
 
-        //model process Object
         Object controller = managerRe.getInstanceClass(transaction.getController());
-        //Controller response of that object processed and define behaviour in ur view
-        managerRe.runMethodModel(transaction.getModel(), transaction.getModel_func(), frame, controller, obj);
-        //the view execute some operation about the object processed
+
+        managerRe.runMethodModel(transaction.getModel(), transaction.getModelFunction(), frame, controller, obj);
 
         managerLog.writeLogTransaction(transactions, transaction);
-        //Cla
+
     }
 }

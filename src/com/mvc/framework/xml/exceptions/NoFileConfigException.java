@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mvc.framework.transaction;
+package com.mvc.framework.xml.exceptions;
 
 /**
  *
  * @author emman
  */
-public class NoTransactionException extends Exception {
+public class NoFileConfigException extends Exception {
 
-    public NoTransactionException(String message) {
+    public NoFileConfigException(String message) {
         super(message);
     }
 

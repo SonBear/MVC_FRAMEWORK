@@ -16,7 +16,7 @@ public class Transaction {
     private String name;
     private String controller;
     private String model;
-    private String model_func;
+    private String modelFunction;
 
     public Transaction(String name, String controller, String view, String model) {
         this.name = name;
@@ -27,12 +27,12 @@ public class Transaction {
     public Transaction() {
     }
 
-    public String getModel_func() {
-        return model_func;
+    public String getModelFunction() {
+        return modelFunction;
     }
 
-    public void setModel_func(String model_func) {
-        this.model_func = model_func;
+    public void setModelFunction(String modelFunction) {
+        this.modelFunction = modelFunction;
     }
 
     public String getName() {
@@ -61,7 +61,7 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return "Transaction{" + "name=" + name + ", controller=" + controller + ", model=" + model + ", model_func=" + model_func + '}';
+        return "Transaction{" + "name=" + name + ", controller=" + controller + ", model=" + model + ", model_func=" + modelFunction + '}';
     }
 
     @Override

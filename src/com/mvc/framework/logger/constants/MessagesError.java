@@ -16,7 +16,8 @@ public enum MessagesError {
     MSG_ERROR_BAD_TYPE_SIZE_FILE("Error escriba el tipo de tamaño correcto kb-mg-gb"),
     MSG_ERROR_BAD_CONFIG_VALUE_MAX_CAP("Error formato incorrecto del tamaño de archivo maximo"),
     MSG_ERROR_NO_FILE_PROPERTIES("Error el archivo properties no existe"),
-    MSG_ERROR_PATH_UNACCESIBLE("La ruta de los archivos no es accesible");
+    MSG_ERROR_PATH_UNACCESIBLE("La ruta de los archivos no es accesible"),
+    MSG_ERROR_NOT_FILE_LOG_EXST("EL archivo para el logger no pudo crearse");
 
     private final String value;
 

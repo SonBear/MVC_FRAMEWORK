@@ -6,6 +6,9 @@
 package com.mvc.framework.xml;
 
 import com.mvc.framework.transaction.Transaction;
+import com.mvc.framework.xml.constances.MessagesError;
+import com.mvc.framework.xml.exceptions.BadConfigException;
+import com.mvc.framework.xml.exceptions.NoFileConfigException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -26,7 +29,7 @@ import javax.xml.stream.events.XMLEvent;
  */
 public class ManagerTransactionXML implements XMLManager<Transaction> {
 
-    private String configFile;
+    private final String configFile;
     static final String NAME = "name";
     static final String TRANSACTION = "transaction";
     static final String CONTROLLER = "controller";
@@ -82,7 +85,7 @@ public class ManagerTransactionXML implements XMLManager<Transaction> {
                             while (attributes.hasNext()) {
                                 Attribute attribute = attributes.next();
                                 if (attribute.getName().toString().equals(MODEL_NAME_FUNC)) {
-                                    transaction.setModel_func(attribute.getValue());
+                                    transaction.setModelFunction(attribute.getValue());
                                 }
                             }
                             event = eventReader.nextEvent();
@@ -96,7 +99,7 @@ public class ManagerTransactionXML implements XMLManager<Transaction> {
                     EndElement endElement = event.asEndElement();
                     if (endElement.getName().getLocalPart().equals(TRANSACTION)) {
                         if (!isCorrectTransaction(transaction)) {
-                            throw new BadConfigException("Archivo de configuracion mal definido");
+                            throw new BadConfigException(MessagesError.MSG_ERROR_BAD_CONFIG.toString());
                         }
 
                         items.add(transaction);
@@ -105,9 +108,9 @@ public class ManagerTransactionXML implements XMLManager<Transaction> {
 
             }
         } catch (FileNotFoundException ex) {
-            throw new NoFileConfigException("Archivo de configuracion inexistente");
+            throw new NoFileConfigException(MessagesError.MSG_ERROR_NO_CONFIG_FILE_EXISTS.toString());
         } catch (XMLStreamException ex) {
-            throw new BadConfigException("Archivo de configuracion mal definido");
+            throw new BadConfigException(MessagesError.MSG_ERROR_BAD_CONFIG.toString());
         }
 
         return items;
@@ -115,7 +118,7 @@ public class ManagerTransactionXML implements XMLManager<Transaction> {
 
     private Boolean isCorrectTransaction(Transaction transaction) {
         return transaction.getName() != null && transaction.getController() != null && transaction.getModel() != null
-                && transaction.getModel_func() != null;
+                && transaction.getModelFunction() != null;
     }
 
 }

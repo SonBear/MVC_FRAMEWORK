@@ -1,5 +1,7 @@
 
+import com.mvc.framework.logger.exceptions.NoFilePropsException;
 import com.mvc.framework.transaction.ManagerTransactions;
+import com.mvc.framework.transaction.TransactionExecutor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
@@ -21,7 +23,6 @@ public class View extends javax.swing.JFrame {
      */
     public View() {
         initComponents();
-        this.jButton1.addActionListener(new Controller());
     }
 
     /**
@@ -36,7 +37,7 @@ public class View extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("DDDDD");
+        jLabel1.setText("jLabel1");
 
         jButton1.setText("jButton1");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -52,21 +53,21 @@ public class View extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(91, 91, 91)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(53, 53, 53)
+                        .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(154, 154, 154)
+                        .addGap(140, 140, 140)
                         .addComponent(jButton1)))
-                .addContainerGap(132, Short.MAX_VALUE))
+                .addContainerGap(187, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(67, 67, 67)
+                .addGap(74, 74, 74)
                 .addComponent(jLabel1)
-                .addGap(83, 83, 83)
+                .addGap(56, 56, 56)
                 .addComponent(jButton1)
-                .addContainerGap(113, Short.MAX_VALUE))
+                .addContainerGap(133, Short.MAX_VALUE))
         );
 
         pack();
@@ -74,11 +75,22 @@ public class View extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
-            new ManagerTransactions().executeTransaction("Transaction1", this, "Hoolaa");
+            TransactionExecutor t = new ManagerTransactions();
+            t.executeTransaction("Transaction1", this, "Hola");
+        } catch (NoFilePropsException ex) {
+            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    public void setjButton1(JButton jButton1) {
+        this.jButton1 = jButton1;
+    }
+
+    public void setjLabel1(JLabel jLabel1) {
+        this.jLabel1 = jLabel1;
+    }
 
     public JButton getjButton1() {
         return jButton1;
@@ -121,10 +133,6 @@ public class View extends javax.swing.JFrame {
                 new View().setVisible(true);
             }
         });
-    }
-
-    public void renderModel(String string) {
-        jLabel1.setText(string);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
