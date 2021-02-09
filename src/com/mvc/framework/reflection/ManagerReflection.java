@@ -14,7 +14,7 @@ import java.util.HashMap;
  */
 public class ManagerReflection implements ReflectionTransaction {
 
-    private HashMap<String, Object> instances = new HashMap<>();
+    private final HashMap<String, Object> instances = new HashMap<>();
 
     @Override
     public void runMethodModel(String modelNameClass, String nameMethodModel, Object view, Object controller, Object arg)

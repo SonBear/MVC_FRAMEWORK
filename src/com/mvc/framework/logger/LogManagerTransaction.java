@@ -1,11 +1,11 @@
 package com.mvc.framework.logger;
 
-import com.mvc.framework.logger.exceptions.NoFilePropsException;
-import com.mvc.framework.logger.exceptions.BadConfigLogException;
 import com.mvc.framework.logger.constants.LogText;
 import com.mvc.framework.logger.constants.MessagesError;
 import com.mvc.framework.logger.constants.PathsLog;
 import com.mvc.framework.logger.constants.SizeFiles;
+import com.mvc.framework.logger.exceptions.BadConfigLogException;
+import com.mvc.framework.logger.exceptions.NoFilePropsException;
 import com.mvc.framework.transaction.Transaction;
 import java.io.File;
 import java.io.FileInputStream;
@@ -99,12 +99,19 @@ public class LogManagerTransaction implements LogTransaction {
 
     }
 
-    private void changeCurrentNumberFile() {
+    private void changeCurrentNumberFile() throws BadConfigLogException {
 
         currentNumberFile++;
         pathLogFile = PathsLog.RELATIVE_PATH_LOG_FILE.toString()
                 + currentNumberFile + PathsLog.TYPE_LOG_FILE.toString();
         currentFile = new File(pathLogFile);
+        if (!currentFile.exists()) {
+            try {
+                currentFile.createNewFile();
+            } catch (IOException ex) {
+                throw new BadConfigLogException(MessagesError.MSG_ERROR_PATH_UNACCESIBLE.toString());
+            }
+        }
 
     }
 
