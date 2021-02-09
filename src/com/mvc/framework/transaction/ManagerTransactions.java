@@ -9,7 +9,7 @@ import com.mvc.framework.logger.LogManagerTransaction;
 import com.mvc.framework.logger.LogTransaction;
 import com.mvc.framework.logger.exceptions.NoFilePropsException;
 import com.mvc.framework.reflection.ManagerReflection;
-import com.mvc.framework.reflection.ReflectionProcessorTransaction;
+import com.mvc.framework.reflection.ReflectionTransaction;
 import com.mvc.framework.xml.ManagerTransactionXML;
 import com.mvc.framework.xml.XMLManager;
 import java.util.List;
@@ -21,7 +21,7 @@ import javax.swing.JFrame;
  */
 public class ManagerTransactions implements TransactionExecutor {
 
-    private final ReflectionProcessorTransaction managerRe = new ManagerReflection();
+    private final ReflectionTransaction managerRe = new ManagerReflection();
     private final XMLManager<Transaction> managerXML = new ManagerTransactionXML("files/config.xml");
     private final LogTransaction managerLog;
 
