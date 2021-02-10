@@ -12,7 +12,7 @@ package com.mvc.framework.xml.constances;
 public enum MessagesError {
 
     MSG_ERROR_BAD_CONFIG("Archivo de configuracion mal definido"),
-    MSG_ERROR_NO_CONFIG_FILE_EXISTS("Archivo de configuracion mal definido");
+    MSG_ERROR_NO_CONFIG_FILE_EXISTS("El archivo de configuracion no existe");
     private final String value;
 
     MessagesError(final String value) {
