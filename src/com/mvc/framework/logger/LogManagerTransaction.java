@@ -1,11 +1,11 @@
 package com.mvc.framework.logger;
 
-import com.mvc.framework.logger.exceptions.NoFilePropsException;
-import com.mvc.framework.logger.exceptions.BadConfigLogException;
 import com.mvc.framework.logger.constants.LogText;
 import com.mvc.framework.logger.constants.MessagesError;
 import com.mvc.framework.logger.constants.PathsLog;
 import com.mvc.framework.logger.constants.SizeFiles;
+import com.mvc.framework.logger.exceptions.BadConfigLogException;
+import com.mvc.framework.logger.exceptions.NoFilePropsException;
 import com.mvc.framework.transaction.Transaction;
 import java.io.File;
 import java.io.FileInputStream;
@@ -99,26 +99,34 @@ public class LogManagerTransaction implements LogTransaction {
 
     }
 
-    private void changeCurrentNumberFile() {
+    private void changeCurrentNumberFile() throws BadConfigLogException {
 
         currentNumberFile++;
         pathLogFile = PathsLog.RELATIVE_PATH_LOG_FILE.toString()
                 + currentNumberFile + PathsLog.TYPE_LOG_FILE.toString();
         currentFile = new File(pathLogFile);
-
     }
 
-    private String readLogFile() throws NoFilePropsException {
-        try {
-            return managerFiles.readFile(pathLogFile);
-        } catch (FileNotFoundException ex) {
-            throw new NoFilePropsException(MessagesError.MSG_ERROR_NO_FILE_PROPERTIES.toString());
+    private void checkCurrentFile() throws BadConfigLogException {
+        if (!currentFile.exists()) {
+            try {
+                currentFile.createNewFile();
+            } catch (IOException ex) {
+                throw new BadConfigLogException(MessagesError.MSG_ERROR_NOT_FILE_LOG_EXST.toString());
+            }
         }
+    }
+
+    private String readLogFile() throws FileNotFoundException {
+
+        return managerFiles.readFile(pathLogFile);
+
     }
 
     @Override
     public void writeLogTransaction(List<Transaction> transactions, Transaction transaction) throws BadConfigLogException, NoFilePropsException {
         checkFileSize();
+        checkCurrentFile();
         if (isLogOn()) {
             try {
                 String content = readLogFile();
@@ -139,7 +147,7 @@ public class LogManagerTransaction implements LogTransaction {
 
                 managerFiles.writeFile(pathLogFile, content);
             } catch (IOException ex) {
-                throw new NoFilePropsException(MessagesError.MSG_ERROR_NO_FILE_PROPERTIES.toString());
+                throw new BadConfigLogException(MessagesError.MSG_ERROR_NOT_FILE_LOG_EXST.toString());
             }
 
         }

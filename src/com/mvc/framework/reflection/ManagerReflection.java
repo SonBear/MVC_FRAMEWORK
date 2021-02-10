@@ -1,10 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mvc.framework.reflection;
 
+import com.mvc.framework.reflection.constanst.MessagesError;
+import com.mvc.framework.reflection.exceptions.ClassErrorException;
+import com.mvc.framework.reflection.exceptions.MethodErrorException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,13 +12,13 @@ import java.util.HashMap;
  *
  * @author emman
  */
-public class ManagerReflection implements ReflectionProcessorTransaction {
+public class ManagerReflection implements ReflectionTransaction {
 
-    private HashMap<String, Object> instances = new HashMap<>();
+    private final HashMap<String, Object> instances = new HashMap<>();//To don't create intance of the same classes
 
     @Override
     public void runMethodModel(String modelNameClass, String nameMethodModel, Object view, Object controller, Object arg)
-            throws NoSuchMethodException, ClassNotFoundException {
+            throws MethodErrorException, ClassErrorException {
         try {
             Class c = Class.forName(modelNameClass);
             Object instance = getInstanceClass(modelNameClass);
@@ -38,20 +36,20 @@ public class ManagerReflection implements ReflectionProcessorTransaction {
             }
 
         } catch (NoSuchMethodException ex) {
-            throw new NoSuchMethodException("Error metodo no existe en el modelo");
-        } catch (SecurityException ex) {
-            throw new NoSuchMethodException("Error metodo inaccesible");
-        } catch (IllegalAccessException ex) {
-            throw new NoSuchMethodException("Error metodo inaccesible");
+            throw new MethodErrorException(MessagesError.ERROR_NO_METHOD_EXIST.toString());
+        } catch (SecurityException | IllegalAccessException ex) {
+            throw new MethodErrorException(MessagesError.ERROR_NO_ACCESIBLE_METHOD.toString());
         } catch (IllegalArgumentException ex) {
-            throw new NoSuchMethodException("Error argumentos del metodo del modelo no validos");
+            throw new MethodErrorException(MessagesError.ERROR_ARGUMENTS_NO_VALIDS.toString());
         } catch (InvocationTargetException ex) {
-            throw new NoSuchMethodException("Error en el codigo dentro del metodo");
+            throw new MethodErrorException(MessagesError.ERROR_IN_METHOD_CODE.toString());
+        } catch (ClassNotFoundException ex) {
+            throw new ClassErrorException(MessagesError.ERROR_NO_CLASS_EXISTS.toString());
         }
     }
 
     @Override
-    public Object getInstanceClass(String nameClass) throws ClassNotFoundException {
+    public Object getInstanceClass(String nameClass) throws ClassErrorException {
 
         if (instances.containsKey(nameClass)) {
             return instances.get(nameClass);
@@ -72,15 +70,15 @@ public class ManagerReflection implements ReflectionProcessorTransaction {
                 instances.put(nameClass, instance);
                 return instance;
             } catch (ClassNotFoundException ex) {
-                throw new ClassNotFoundException("Error la clase no está definida");
+                throw new ClassErrorException(MessagesError.ERROR_NO_CLASS_EXISTS.toString());
             } catch (InstantiationException ex) {
-                throw new ClassNotFoundException("Error al inicializar clase");
+                throw new ClassErrorException(MessagesError.ERROR_INIT_CLASS.toString());
             } catch (IllegalAccessException ex) {
-                throw new ClassNotFoundException("Error al inicializar no es accesible el constructor clase");
+                throw new ClassErrorException(MessagesError.ERROR_INIT_UNACCESBILE.toString());
             } catch (IllegalArgumentException ex) {
-                throw new ClassNotFoundException("Error al inicializar argumentos no validos para el contructor clase");
+                throw new ClassErrorException(MessagesError.ERROR_INIT_ARGUMENTS.toString());
             } catch (InvocationTargetException ex) {
-                throw new ClassNotFoundException("Error en el codigo dentro del contructor de la clase");
+                throw new ClassErrorException(MessagesError.ERROR_INIT_CODE.toString());
             }
 
         }
