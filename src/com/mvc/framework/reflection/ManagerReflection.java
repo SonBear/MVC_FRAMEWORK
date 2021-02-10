@@ -23,7 +23,10 @@ public class ManagerReflection implements ReflectionTransaction {
             Class c = Class.forName(modelNameClass);
             Object instance = getInstanceClass(modelNameClass);
 
-            if (view == null) {
+            if (view == null && arg == null) {
+                Method method = c.getMethod(nameMethodModel, controller.getClass());
+                method.invoke(instance, controller);
+            } else if (view == null) {
                 Method method = c.getMethod(nameMethodModel, controller.getClass(), arg.getClass());
                 method.invoke(instance, controller, arg);
 
