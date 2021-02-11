@@ -7,7 +7,6 @@ package com.mvc.framework.transaction;
 
 import com.mvc.framework.logger.LogManagerTransaction;
 import com.mvc.framework.logger.LogTransaction;
-import com.mvc.framework.logger.exceptions.NoFilePropsException;
 import com.mvc.framework.reflection.ManagerReflection;
 import com.mvc.framework.reflection.ReflectionTransaction;
 import com.mvc.framework.transaction.exceptions.NoTransactionException;
@@ -29,7 +28,7 @@ public class ManagerTransactions implements TransactionExecutor {
     private final XMLManager<Transaction> managerXML;
     private final LogTransaction managerLog;
 
-    public ManagerTransactions() throws NoFilePropsException {
+    public ManagerTransactions() {
         this.managerRe = new ManagerReflection();
         this.managerXML = new ManagerTransactionXML(PATH_CONFIG_FILE);
         this.managerLog = new LogManagerTransaction();

@@ -40,12 +40,12 @@ public class LogManagerTransaction implements LogTransaction {
     private int currentNumberFile;
     private File currentFile;
 
-    public LogManagerTransaction() throws NoFilePropsException {
+    public LogManagerTransaction() {
         pathLogFile = PathsLog.RELATIVE_PATH_LOG_FILE.toString()
                 + currentNumberFile + PathsLog.TYPE_LOG_FILE.toString();
         currentFile = new File(pathLogFile);
         managerFiles = new ManagerFiles();
-        configLog();
+
     }
 
     private boolean isLogOn() throws BadConfigLogException {
@@ -125,9 +125,15 @@ public class LogManagerTransaction implements LogTransaction {
 
     @Override
     public void writeLogTransaction(List<Transaction> transactions, Transaction transaction) throws BadConfigLogException, NoFilePropsException {
-        checkFileSize();
-        checkCurrentFile();
+        boolean isConfig = props != null;
+
+        if (!isConfig) {
+            configLog();
+        }
+
         if (isLogOn()) {
+            checkFileSize();
+            checkCurrentFile();
             try {
                 String content = readLogFile();
                 if (!content.equals("")) {
@@ -146,6 +152,7 @@ public class LogManagerTransaction implements LogTransaction {
                 }
 
                 managerFiles.writeFile(pathLogFile, content);
+
             } catch (IOException ex) {
                 throw new BadConfigLogException(MessagesError.MSG_ERROR_NOT_FILE_LOG_EXST.toString());
             }
