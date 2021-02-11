@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<config>        
-         <transaction name="name">
-		<controller>ControllerName</controller>
-                <model nameFunction = "methodModel">ModelName</model>
+<config>
+     <transaction name="initList">
+		<controller>com.mvc.exampl.Controlador</controller>
+                <model nameFunction = "initList">com.mvc.exampl.Modelo</model>
+	</transaction>
+        <transaction name="addPerson">
+		<controller>com.mvc.exampl.Controlador</controller>
+                <model nameFunction = "addPerson">com.mvc.exampl.Modelo</model>
 	</transaction>
 </config>
+
