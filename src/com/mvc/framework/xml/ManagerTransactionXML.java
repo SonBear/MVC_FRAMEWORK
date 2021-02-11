@@ -6,7 +6,7 @@
 package com.mvc.framework.xml;
 
 import com.mvc.framework.transaction.Transaction;
-import com.mvc.framework.xml.constances.MessagesError;
+import com.mvc.framework.xml.constants.MessagesError;
 import com.mvc.framework.xml.exceptions.BadConfigException;
 import com.mvc.framework.xml.exceptions.NoFileConfigException;
 import java.io.FileInputStream;
