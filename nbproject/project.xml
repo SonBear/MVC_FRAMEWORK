@@ -6,7 +6,6 @@
             <name>MVC_FRAMEWORK</name>
             <source-roots>
                 <root id="src.src.dir"/>
-                <root id="src.files.dir"/>
             </source-roots>
             <test-roots>
                 <root id="test.src.dir"/>

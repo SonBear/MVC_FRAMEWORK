@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<config>        
-         <transaction name="name">
-		<controller>ControllerName</controller>
-                <model nameFunction = "methodModel">ModelName</model>
-	</transaction>
-</config>
